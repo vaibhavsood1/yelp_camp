@@ -1,0 +1,207 @@
+<html>
+<head>
+	<title>Yelp Camp</title>
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.min.css">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<style type="text/css">
+.delete-form{
+    display:inline;
+}
+.delete-comment{
+    display:inline;
+}
+.one{
+    margin-left:2%;
+    font-size:1.6em;
+}
+.three{
+    margin-left:2%;
+}
+.two{
+    margin-left:40%;
+    font-size:1.6em;
+}
+
+.caption{
+    text-align:center;
+}
+
+.img-thumbnail img{
+    width:100%;
+}
+.lead{
+    font-size:2em;
+}
+.sub{
+    padding-left:2%;
+}
+.btn-link{
+    font-size:1.5em;
+    display:inline;
+}
+figcaption{
+    padding:10px;
+}
+.figure-caption{
+ 
+ margin-top:10px;
+ display:inline;
+}
+</style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="/">Yelp Camp</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav ml-auto">
+      <% if(!currentUser){ %>
+                        <li class="nav-item active">
+        <a class="nav-link" href="/login">Login <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="/register">Sign Up <span class="sr-only">(current)</span></a>
+      </li>
+                    <% } else { %>
+                    <li class = "nav-item active">
+<a class="nav-link" href="#">Signed in as <%= currentUser.username %> <span class="sr-only">(current)</span></a></li>
+                        <li class = "nav-item active">
+<a class="nav-link" href="/logout">Logout <span class="sr-only">(current)</span></a></li>
+                    <% } %>
+      
+    </ul>
+    
+  </div>
+</nav>
+<div class  = "container">
+  
+  <%  if(error&& error.length>0){ %>
+  <div class="alert alert-danger" role="alert">
+  <%= error %>
+  </div>
+<%  } %>
+
+<%  if(success&&success.length>0){  %>
+<div class="alert alert-success" role="alert">
+  <%= success %>
+</div>
+
+
+<%  } %>
+</div>
+
+
+<div class = "container">
+    <div class = "row">
+        <div class = "col-md-3">
+            <h2 class="lead">Yelp Camp</h2>
+            <div class = "list-group">
+                <div class = "list-group-item active">Info 1</div>
+                   <div class = "list-group-item ">   Info 1</div>
+                    <div class = "list-group-item ">  Info 1</div>
+                
+                
+            </div>
+            
+        </div>
+        
+        <div class= "col-md-9">
+            <figure class = "figure">
+                
+                <div class = "img-thumbnail"><img src = "<%= camp.image %>"></img>
+                <div class = "row">
+                    <div class = "col-md-3 one"><a href = "#"><%= camp.name %></a></div>
+                    <div class = "col-md-3 two">9$/night</div>
+                </div>
+          
+               <p class = "sub"><em>submitted By <%= camp.username %></em></p>
+                <% if(   currentUser  &&camp.username == currentUser.username){ %>
+               <div><a href = "/campgrounds/<%= camp._id %>/edit"><button class = "btn btn-warning three">EDIT</button></a>
+               <form  class = "delete-form" action="/campgrounds/<%= camp._id %>?_method=DELETE" method = "POST">
+                   <button class = "btn btn-danger">Delete</button>
+                   
+               </form>
+               </div>
+               <% } %>
+                       
+                 <figcaption class="figure-caption"><%= camp.desc %></figcaption>
+
+            </div>
+                
+            </figure>
+            
+            
+            
+            <div class="ui comments">
+  <h3 class="ui dividing header">Comments</h3>
+  <% for(var i =0;i<camp.comments.length;i++){ %>
+   <div class="comment">
+    
+    <div class="content">
+      <a class="author"><%= camp.comments[i].username %></a>
+      <div class="metadata">
+        <span class="date">Today at 5:42PM</span>
+      </div>
+      <div class="text">
+        <%= camp.comments[i].text %>
+      </div>
+      
+      </div>
+      </div>
+    <%  if( currentUser  &&camp.comments[i].username == currentUser.username){ %>
+        <a href = "/campgrounds/comments/<%= camp.comments[i]._id %>/edit"><button class = "btn btn-warning btn-sm">Edit</button></a>
+        <form class = "delete-comment" method="POST" action="/campgrounds/comments/<%= camp.comments[i]._id %>?_method=DELETE">
+  <button type="submit" class = "btn btn-danger btn-sm">Delete</button>
+</form>
+    <%    }  %>
+
+<% } %>
+  
+  
+  
+      </div>
+      
+      <a href = "/campgrounds/<%= camp._id %>/comments/new"><button class = "btn btn-primary btn-sm">Review</button></a>
+        </div>
+        
+         </div>
+    
+
+
+
+
+    
+    
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
+
+
+
+
+
+
