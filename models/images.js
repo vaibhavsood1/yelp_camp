@@ -1,5 +1,5 @@
 var mongoose = require("mongoose");
-mongoose.connect('mongodb://localhost/yelp_camp');
+
 var comment  = require("../models/comments.js");
 var user = require("../models/user.js");
 
