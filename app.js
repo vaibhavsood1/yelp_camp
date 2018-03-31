@@ -11,7 +11,7 @@ var methodOverride = require('method-override');
 var flash = require("connect-flash");
 app.use(methodOverride('_method'));
 app.use(flash());
-mongoose.connect('mongodb://vaibhavsood:voiletpurple@ds161483.mlab.com:61483/vaibhavyelpcamp');
+mongoose.connect(process.env.dataenv);
 // mongoose.connect('mongodb://localhost/yelp_camp');
 var Image  = require("./models/images.js");
 var comment = require("./models/comments.js")
