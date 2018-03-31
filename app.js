@@ -44,6 +44,8 @@ app.get("/",function(req,res){
     res.render("homepage.ejs");
 });
 
+
+
 app.get("/register",function(req, res) {
     res.render("register.ejs")
 })
